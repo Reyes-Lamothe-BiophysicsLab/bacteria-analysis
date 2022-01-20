@@ -1,4 +1,4 @@
-function []=beeswarmbox(ints)
+function []=beeswarmbox3(ints)
 save_name='beeswarmplot_n_spot.pdf';
 for l=1:width(ints)
     l2=l-1;
@@ -8,6 +8,13 @@ for l=1:width(ints)
     beeswarm(x,y,'sort_style','up','corral_style','omit');
     
     hold on
+    if l<1.1
+        ylabel('Intensity')
+        xlabel('Counts for all spots')
+    else
+        ylabel('Intensity')
+        xlabel('Counts for '+ string(l-1) + ' spot(s)')
+    end
     xlim([0 2])
     ylim([0 20000])
     boxplot(y,'BoxStyle','filled','MedianStyle','target')

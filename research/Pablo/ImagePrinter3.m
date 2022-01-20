@@ -1,4 +1,4 @@
-function [ObjCell,Spotdata,AMeanL,AMaxL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,AMeanL,AMaxL)
+function [ObjCell,Spotdata,AMeanL,AMaxL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,AMeanL,AMaxL,Bin)
 Spotdata=[];
 times = ceil(height(ObjCell)/10);
 ha = tight_subplot(times,10,[.001 .001],[.001 .001],[.001 .001]);
@@ -10,6 +10,9 @@ for x= 1:height(ObjCell)
     ObjCell{x,7}=sum(ObjCell{x, 2}{:, 8});
     vpix=ObjCell{x, 2}{1, 7};
     seg2=seg-(min(seg));
+    if Bin{1,1} == 'n' || Bin{1,1} =='N'
+        seg2=seg2*4;
+    end
     seg2(seg2<300)=0;
     seg3=nonzeros(seg2);
     AMean = mean(seg2);

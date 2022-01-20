@@ -1,7 +1,8 @@
 
-function [ObjCell,Spotdata]=ImageModifier3(ObjCell,C,l,JJ,Spotdata)
+function [ObjCell,Spotdata]=ImageModifier3(ObjCell,C,l,JJ,Spotdata,sizefx)
 r1=2;
-user_input2 = inputdlg ('Do all the cells good?','Cell Processing',[1 50],{'N'});
+sCat= strcat('Cell Processing ',' [',string(JJ),'/',string(sizefx),'] ');
+user_input2 = inputdlg ('Do all the cells good?',sCat,[1 50],{'N'});
 %user_input2 = {'y'};
 if user_input2{1,1} == 'Y' || user_input2 {1,1} == 'y'
     close all
@@ -17,7 +18,7 @@ else
         seg=ObjCell{l3, 1};
         seg(seg==0)=ObjCell{l3, 2}{1, 5};
         figure
-        imshow(seg,[])%HM modify magnification
+        imshow(seg,[],'InitialMagnification',500)%HM modify magnification
         text(3,3,label,'Color','r')
         title('click a spot and hold alt key to select multiple spots, push any key when finished')
         datacursormode on

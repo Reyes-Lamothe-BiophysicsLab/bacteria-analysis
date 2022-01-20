@@ -18,13 +18,17 @@ Spo=[];
 AMeanL=[];
 AMaxL=[];
 %%
+Bin= inputdlg({'Did you use Binning?',},'User Input',[1 50],{'y'});
 for JJ= 1:height(a)
     Spotdata=[];
     c=imbinarize(readNPY(a{JJ,1}));
-    c= imresize (c, 2, 'nearest');
     RD=bfopen(aa{1,JJ});
     C=double(RD{1,1}{1,1});
-    C= imresize (C, 2.0, 'nearest');
+    sizefx= height(a);
+    if Bin{1,1} == 'y' || Bin{1,1} =='Y'
+        c= imresize (c, 2, 'nearest');
+        C= imresize (C, 2.0, 'nearest');
+    end
     [si,ze]=size(C);
     f =(bwareaopen(c,LB));
     f(1,:) = 1;
@@ -62,9 +66,9 @@ for JJ= 1:height(a)
             user_input_tracks= {'75';'1.5'};
             thresh = str2double(user_input_tracks{1});
             S =str2double(user_input_tracks{2});
-            [ObjCell,Spotdata,AMeanL,AMaxL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,AMeanL,AMaxL);
-            user_input2 = inputdlg ('Is the threshold and SNR good?','Cell Processing',[1 50],{'N'});
-            %user_input2 = {'y'};
+            [ObjCell,Spotdata,AMeanL,AMaxL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,AMeanL,AMaxL,Bin);
+            %user_input2 = inputdlg ('Is the threshold and SNR good?','Cell Processing',[1 50],{'N'});
+            user_input2 = {'y'};
             if user_input2{1,1} == 'N' || user_input2 {1,1} == 'n'
                 close all
                 tested= 1;
@@ -72,10 +76,10 @@ for JJ= 1:height(a)
                 tested =1+1;
             end
         end
-        [ObjCell,Spotdata]=ImageModifier3(ObjCell,C,l,JJ,Spotdata);
+        [ObjCell,Spotdata]=ImageModifier3(ObjCell,C,l,JJ,Spotdata,sizefx);
     else
-        [ObjCell,Spotdata,AMeanL,AMaxL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,AMeanL,AMaxL);
-        [ObjCell,Spotdata]=ImageModifier3(ObjCell,C,l,JJ,Spotdata);
+        [ObjCell,Spotdata,AMeanL,AMaxL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,AMeanL,AMaxL,Bin);
+        [ObjCell,Spotdata]=ImageModifier3(ObjCell,C,l,JJ,Spotdata,sizefx);
         
     end
     SpotData=vertcat(SpotData,Spotdata);
@@ -98,13 +102,13 @@ Total_Average = [length(Spo) mean(Spo) std(Spo)]
 Total_Intensity = [length(Spo) mean(DI(:,5)) std(DI(:,5))]
 d1=zeros(0,5);
 d2=zeros(0,5);
-d3=zeros(1,5)
+d3=zeros(0,5);
 d4=zeros(0,5);
 d1=DI(any(DI(:,2)==1,2),:);
 d_i1 = [length(d1) mean(d1(:,5)) std(d1(:,5))];
 d2=DI(any(DI(:,2)==2,2),:);
 d_i2 = [length(d2) mean(d2(:,5)) std(d2(:,5))];
-d3=DI(any(DI(:,2)==6,2),:);
+d3=DI(any(DI(:,2)==3,2),:);
 d_i3 = [length(d3) mean(d3(:,5)) std(d3(:,5))];
 d4=DI(any(DI(:,2)==4,2),:);
 d_i4 = [length(d4) mean(d4(:,5)) std(d4(:,5))];
@@ -112,6 +116,8 @@ l1=vertcat(-DI(:,4),DI(:,4));
 l2=vertcat(DI(:,4),DI(:,4));
 figure; line(-DI(:,4),DI(:,4))
 hold on
+ylabel('Cell width')
+xlabel('Spot location')
 line(DI(:,4),DI(:,4))
 scatter(d1(:,3),d1(:,4),'black')
 scatter(d2(:,3),d2(:,4),'red')
@@ -129,7 +135,7 @@ for l=1:5
 end
 violin(ints);
 saveas(gcf,'SpotIntensity.pdf')
-beeswarmbox(ints);
+beeswarmbox3(ints);
 Results.Intensities=ints;
 Results.Data=DI;
 Results.Spots=Spo;
