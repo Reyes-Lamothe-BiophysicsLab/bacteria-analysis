@@ -1,5 +1,5 @@
 function [ObjCell,Spotdata]=ImagePrinter(ObjCell,C,LMaxFinder,S,thresh,JJ)
-Spotdata=[];
+Spotdata=[]1;
 times = ceil(height(ObjCell)/10);
 ha = tight_subplot(times,10,[.001 .001],[.001 .001],[.001 .001]);
 for x= 1:height(ObjCell)

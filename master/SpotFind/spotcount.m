@@ -1,5 +1,5 @@
 clear
-close all
+close alll
 % Script to segment cells and count spots from a single image
 %% Variables that can be changed
 LB = 20; % Pixel Lower Boundary
