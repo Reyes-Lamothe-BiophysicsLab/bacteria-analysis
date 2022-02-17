@@ -1,4 +1,4 @@
-function [ObjCell,Spotdata,AMeanL,AMaxL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,AMeanL,AMaxL,Bin)
+function [ObjCell,Spotdata,AMeanL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ, Bin,AMeanL)
 Spotdata=[];
 times = ceil(height(ObjCell)/10);
 ha = tight_subplot(times,10,[.001 .001],[.001 .001],[.001 .001]);
@@ -7,44 +7,53 @@ for x= 1:height(ObjCell)
     im=imcrop(C,ObjCell{x, 2}{1, 6});
     seg=ObjCell{x, 1};
     seg(seg==0)=ObjCell{x, 2}{1, 5};
+
     ObjCell{x,7}=sum(ObjCell{x, 2}{:, 8});
     vpix=ObjCell{x, 2}{1, 7};
-    seg2=seg-(min(seg));
-    if Bin{1,1} == 'n' || Bin{1,1} =='N'
-        seg2=seg2*4;
-    end
-    seg2(seg2<300)=0;
-    seg3=nonzeros(seg2);
-    AMean = mean(seg2);
+
+    seg2=nonzeros(seg);
+    AutoQ = mean(seg2);
+
+   
+    seg3=nonzeros(seg);
+    
+    
+    AMean = mean(seg3);
+    AMeanL = [AMeanL AMean];
+    AStd= std(seg3);
+    
     AMedian= median(seg3);
     AMax = max(seg3);
-    AMeanL = [AMeanL AMean];
-    AMaxL = [AMaxL AMax];
-    Inter=100+((300-100)/(6000-1500))*((AMax)-1500);
-    if Inter<100
-        Inter=100;
+
+
+    lowT= 1500;      %1500
+    highT= 6000;    %6000
+    lowQ= 100;       %100
+    highQ= 300;     %300
+    Inter=lowQ+((highQ-lowQ)/(highT-lowT))*((AMax)-lowT);
+    if Inter<lowQ
+        Inter=lowQ;
     end
-    if Inter>300
-        Inter=300;
+    if Inter>highQ
+        Inter=highQ;
     end
-    %{
-    AutoT= (AMax/AMedian);
-    thresh1=thresh;
-    threshQ= thresh*AutoT;
-    if AMedian>AMean
-        threshQ=threshQ+(thresh*0.5);
-    elseif  (AMean*1.10)>AMedian
-        threshQ=threshQ+(thresh*0.5);
-    end
-    if (AMean*2)>AMax
-        threshQ=threshQ+(thresh*0.5);
-    end
-    if threshQ<thresh1*2
-        threshQ=thresh1*2;
-    end
-    %}
+    
+    if  AutoQ<1200|| Bin{1,1} == 'n' || Bin{1,1} =='N'
+    im= ((3300-1000)*((im-min(seg2))/(max(seg2)-min(seg2))))+1000;
+        Inter=140;
+        scale=1;
+    end 
+
     threshQ=Inter;
     [pos,spotdata]=spotdetect_gauss(im,3,LMaxFinder,S,threshQ,x,JJ,vpix);
+    
+    if scale>0
+    for xf= 1:height(spotdata)
+        spotdata(xf,3)= (spotdata(xf,3)*max(seg2)-spotdata(1,3)*min(seg2)+3300*min(seg2)-1000*max(seg2))/2300;
+        spotdata(xf,4)= (spotdata(xf,4)*max(seg2)-spotdata(1,4)*min(seg2)+3300*min(seg2)-1000*max(seg2))/2300;
+    end
+    end
+    
     [J,~]= size(pos);
     pos2=[];
     if isempty(pos) == 0

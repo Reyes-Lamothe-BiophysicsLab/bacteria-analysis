@@ -1,4 +1,4 @@
-clear
+wclear
 close all
 % Script to segment cells and count spots from a single image
 %% Variables that can be changed
@@ -16,7 +16,6 @@ SpotData=[];
 DI=[];
 Spo=[];
 AMeanL=[];
-AMaxL=[];
 %%
 Bin= inputdlg({'Did you use Binning?',},'User Input',[1 50],{'y'});
 for JJ= 1:height(a)
@@ -49,7 +48,9 @@ for JJ= 1:height(a)
         C2=imcrop(C,List);
         single=imdilate(m,amp);
         seg=C2.*single;
-        AutoQ= mean(seg, 'all');
+
+
+
         stats2 = regionprops(single,seg,'MeanIntensity','Area','PixelList','PixelValues','MajorAxisLength','MinorAxisLength','MinIntensity','Centroid','Orientation');
         if height(stats2) > 1
            [~, I]= max([stats2.Area]);
@@ -66,9 +67,10 @@ for JJ= 1:height(a)
             user_input_tracks= {'75';'1.5'};
             thresh = str2double(user_input_tracks{1});
             S =str2double(user_input_tracks{2});
-            [ObjCell,Spotdata,AMeanL,AMaxL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,AMeanL,AMaxL,Bin);
+            [ObjCell,Spotdata,AMeanL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,Bin,AMeanL);
             %user_input2 = inputdlg ('Is the threshold and SNR good?','Cell Processing',[1 50],{'N'});
             user_input2 = {'y'};
+
             if user_input2{1,1} == 'N' || user_input2 {1,1} == 'n'
                 close all
                 tested= 1;
@@ -78,7 +80,7 @@ for JJ= 1:height(a)
         end
         [ObjCell,Spotdata]=ImageModifier3(ObjCell,C,l,JJ,Spotdata,sizefx);
     else
-        [ObjCell,Spotdata,AMeanL,AMaxL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,AMeanL,AMaxL,Bin);
+        [ObjCell,Spotdata,AMeanL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ,Bin,AMeanL);
         [ObjCell,Spotdata]=ImageModifier3(ObjCell,C,l,JJ,Spotdata,sizefx);
         
     end

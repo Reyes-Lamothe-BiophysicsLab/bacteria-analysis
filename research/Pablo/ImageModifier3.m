@@ -2,8 +2,8 @@
 function [ObjCell,Spotdata]=ImageModifier3(ObjCell,C,l,JJ,Spotdata,sizefx)
 r1=2;
 sCat= strcat('Cell Processing ',' [',string(JJ),'/',string(sizefx),'] ');
-user_input2 = inputdlg ('Do all the cells good?',sCat,[1 50],{'N'});
-%user_input2 = {'y'};
+%user_input2 = inputdlg ('Do all the cells good?',sCat,[1 50],{'N'});
+user_input2 = {'y'};
 if user_input2{1,1} == 'Y' || user_input2 {1,1} == 'y'
     close all
 else

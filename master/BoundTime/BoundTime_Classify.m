@@ -6,7 +6,7 @@ close all
 pred_var_class = [2;3;4;5;8];
 quest_tr = MFquestdlg ( [ 0.6 , 0.1 ] , 'New Classifying Document?', 'New','Yes', 'No', 'Yes');
 if length(quest_tr) == 3
-    folder='/Users/nicolassoubry/Analysis/Matlab';
+    folder='D:/Microscopy';
     te = dir(fullfile(folder, '**', '*mod*.mat'));
     te2=struct2table(te);
     te2.bytes=[];
@@ -24,7 +24,7 @@ if length(quest_tr) == 3
     close all
     namer=te(res).folder + "/" + te(res).name;
 else
-    namer='/Users/nicolassoubry/Analysis/Matlab/mod_Bag.mat_1000trees_LeafSz50_Sam2_BagFr0.703_Preds5.mat'; %change this
+    namer='D:/Microscopy/mod_Bag.mat_1000trees_LeafSz50_Sam2_BagFr0.703_Preds5.mat'; %change this
 end
 classifier = importdata(namer);
 Fileist = dir(fullfile(cd, '**', '*Trackdata.mat'));
