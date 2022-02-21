@@ -1,5 +1,6 @@
 function [ObjCell,Spotdata,AMeanL]=ImagePrinter3(ObjCell,C,LMaxFinder,S,thresh,JJ, Bin,AMeanL)
 Spotdata=[];
+scale=0;
 times = ceil(height(ObjCell)/10);
 ha = tight_subplot(times,10,[.001 .001],[.001 .001],[.001 .001]);
 for x= 1:height(ObjCell)

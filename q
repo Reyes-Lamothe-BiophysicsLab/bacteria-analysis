@@ -1,4 +1,4 @@
-added Labels, and solve a problem which errased the data form 3 spots
+new files with robust thresh
 
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
@@ -7,9 +7,10 @@ added Labels, and solve a problem which errased the data form 3 spots
 # Your branch is up to date with 'origin/master'.
 #
 # Changes to be committed:
-#	modified:   ../../master/violin/beeswarmbox.m
+#	modified:   ../../master/BoundTime/BoundTime_Classify.m
 #	modified:   ImageModifier3.m
 #	modified:   ImagePrinter3.m
-#	new file:   beeswarmbox3.m
+#	new file:   Phase_Contrast_for_iLastik_Mask.m
+#	modified:   VSItoTif.m
 #	modified:   spotcount3.m
 #

@@ -1,4 +1,4 @@
-wclear
+clear
 close all
 % Script to segment cells and count spots from a single image
 %% Variables that can be changed
@@ -137,6 +137,9 @@ for l=1:5
 end
 violin(ints);
 saveas(gcf,'SpotIntensity.pdf')
+AMeanL = transpose(AMeanL);
+ints{1,6}=(AMeanL);
+
 beeswarmbox3(ints);
 Results.Intensities=ints;
 Results.Data=DI;
